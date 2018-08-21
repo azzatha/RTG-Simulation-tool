@@ -1,0 +1,3 @@
+Total records : 15
+Number of records decomposed : 10
+Remaining records : 27
