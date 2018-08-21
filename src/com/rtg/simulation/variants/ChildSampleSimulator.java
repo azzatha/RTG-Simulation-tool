@@ -31,11 +31,6 @@
 package com.rtg.simulation.variants;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.rtg.reader.SequencesReader;
 import com.rtg.reference.Ploidy;
 import com.rtg.reference.ReferenceGenome;
@@ -58,6 +53,9 @@ import com.rtg.vcf.VcfWriter;
 import com.rtg.vcf.VcfWriterFactory;
 import com.rtg.vcf.header.FormatField;
 import com.rtg.vcf.header.VcfHeader;
+import com.rtg.simulation.*;
+import com.rtg.simulation.variants.*;
+
 import java.lang.Math;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -65,6 +63,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.*;
+import java.util.*;
 
 /**
  * Creates a genotyped sample as a child of two parents defined in a VCF file.
@@ -279,13 +278,14 @@ public class ChildSampleSimulator {
 
   // Get the (sorted) parent recombination points for this (diploid) chromosome. There must be at least one and there may be extra
   private int[] getCrossoverPositions(ReferenceSequence refSeq, Sex sex, int seqLength) throws IOException  {
+
     final int[] crossoverPoints = new int[1 + (mRandom.nextDouble() < mExtraCrossoverFreq ? 1 : 0)];
-    Double probability;
+    Double probability = 0.0;
     Integer position = 0;
 
     if (sex == Sex.FEMALE){
-        //open the genetic map associated with chromosome 
-        String fileName = "Female"+refSeq.name()+"CDF.txt";
+        //open the genetic map associated with chromosome         
+        String fileName = "./genetic_map/Female"+refSeq.name()+"CDF.txt";
         BufferedReader fbr = new BufferedReader(new FileReader(fileName));
         ArrayList<Double> cdf_list = new ArrayList<Double>();
         ArrayList<Integer> pos_list = new ArrayList<Integer>();
@@ -301,14 +301,14 @@ public class ChildSampleSimulator {
         } finally {
             fbr.close();
         }
-
         //go through the crossoverPoints 
+        // System.out.println("length = " +crossoverPoints.length);
         for (int i = 0; i < crossoverPoints.length; i++) {
             //choose any number between 0 and 1
             probability = Math.random();
             for (int j = 0 ; j < pos_list.size()-1 ; j++) {
                 //find the area where is the CDF is that randome number
-                if (probability >= cdf_list.get(j) && probability < cdf_list.get(j)){
+                if (probability >= cdf_list.get(j) && probability < cdf_list.get(j+1)){
                     position = pos_list.get(j);
                 }
             }
@@ -317,8 +317,9 @@ public class ChildSampleSimulator {
         }
     } // end of Sex.FEMALE
     
-    if (sex == Sex.MALE){
+    else if (sex == Sex.MALE){
         //open the genetic map associated with chromosome 
+        // String fileName = "/Users/AzzA/Desktop/NewSim/rtg-tools/src/com/rtg/simulation/variants/genetic_map/Male"+refSeq.name()+"CDF.txt";
         String fileName = "./genetic_map/Male"+refSeq.name()+"CDF.txt";
         BufferedReader fbr = new BufferedReader(new FileReader(fileName));
         ArrayList<Double> cdf_list = new ArrayList<Double>();
@@ -335,30 +336,33 @@ public class ChildSampleSimulator {
         } finally {
             fbr.close();
         }
-
         //go through the crossoverPoints 
-        for (int i = 0; i < crossoverPoints.length; i++) {
+        for (int p = 0; p < crossoverPoints.length; p++) {
             //choose any number between 0 and 1
             probability = Math.random();
-            for (int j = 0 ; j < pos_list.size()-1 ; j++) {
+            for (int k = 0 ; k < pos_list.size()-1 ; k++) {
                 //find the area where is the CDF is that randome number
-                if (probability >= cdf_list.get(j) && probability < cdf_list.get(j)){
-                    position = pos_list.get(j);
+                if (probability >= cdf_list.get(k) && probability < cdf_list.get(k+1)){
+                    position = pos_list.get(k);
                 }
             }
             //Add to the position list the pos corresponding to CDF
-            crossoverPoints[i] = position;
+            crossoverPoints[p] = position;
         }
     }// end of Sex.MALE
     
     // for (int i = 0; i < crossoverPoints.length; i++) {
     //   crossoverPoints[i] = mRandom.nextInt(seqLength);
-    // }
+    // } 
 
     Arrays.sort(crossoverPoints);
     if (mVerbose) {
       Diagnostic.info("Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
     }
+    //System.out.println( "Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
+    //for (int i = 0; i < crossoverPoints.length; i++) {
+    // System.out.println( "female crossoverPoints[" +i+"]"+   crossoverPoints[i]);}
+    
     return crossoverPoints;
   }
 
@@ -372,6 +376,7 @@ public class ChildSampleSimulator {
     final int childCount = childPloidy.count();
     final int[] motherCrossovers = getCrossoverPositions(refSeq, Sex.FEMALE, seqLength);
     final int[] fatherCrossovers = getCrossoverPositions(refSeq, Sex.MALE, seqLength);
+
     int motherCurrentCrossover = 0;
     int fatherCurrentCrossover = 0;
 
