@@ -302,6 +302,8 @@ public class ChildSampleSimulator {
             cdf_list.add(Double.parseDouble(words[3]));
             line = br.readLine();
           }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
     } finally {
         br.close();
     }
