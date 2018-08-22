@@ -278,79 +278,48 @@ public class ChildSampleSimulator {
 
   // Get the (sorted) parent recombination points for this (diploid) chromosome. There must be at least one and there may be extra
   private int[] getCrossoverPositions(ReferenceSequence refSeq, Sex sex, int seqLength) throws IOException  {
-
     final int[] crossoverPoints = new int[1 + (mRandom.nextDouble() < mExtraCrossoverFreq ? 1 : 0)];
     Double probability = 0.0;
     Integer position = 0;
-
+    String fileName = null;
+    
+    //open the genetic map associated with chromosome         
     if (sex == Sex.FEMALE){
-        //open the genetic map associated with chromosome         
-        String fileName = "./genetic_map/Female"+refSeq.name()+"CDF.txt";
-        BufferedReader fbr = new BufferedReader(new FileReader(fileName));
-        ArrayList<Double> cdf_list = new ArrayList<Double>();
-        ArrayList<Integer> pos_list = new ArrayList<Integer>();
-        try {
-            String line = fbr.readLine();
-            line = fbr.readLine();
-            while (line != null){
-                String[] words = line.split("\t");
-                pos_list.add(Integer.parseInt(words[1])); 
-                cdf_list.add(Double.parseDouble(words[3]));
-                line = fbr.readLine();
-            }
-        } finally {
-            fbr.close();
-        }
-        //go through the crossoverPoints 
-        // System.out.println("length = " +crossoverPoints.length);
-        for (int i = 0; i < crossoverPoints.length; i++) {
-            //choose any number between 0 and 1
-            probability = Math.random();
-            for (int j = 0 ; j < pos_list.size()-1 ; j++) {
-                //find the area where is the CDF is that randome number
-                if (probability >= cdf_list.get(j) && probability < cdf_list.get(j+1)){
-                    position = pos_list.get(j);
-                }
-            }
-            //Add to the position list the pos corresponding to CDF
-            crossoverPoints[i] = position;
-        }
-    } // end of Sex.FEMALE
-    
+      fileName = "./genetic_map/Female"+refSeq.name()+"CDF.txt";
+    }
     else if (sex == Sex.MALE){
-        //open the genetic map associated with chromosome 
-        // String fileName = "/Users/AzzA/Desktop/NewSim/rtg-tools/src/com/rtg/simulation/variants/genetic_map/Male"+refSeq.name()+"CDF.txt";
-        String fileName = "./genetic_map/Male"+refSeq.name()+"CDF.txt";
-        BufferedReader fbr = new BufferedReader(new FileReader(fileName));
-        ArrayList<Double> cdf_list = new ArrayList<Double>();
-        ArrayList<Integer> pos_list = new ArrayList<Integer>();
-        try {
-            String line = fbr.readLine();
+      fileName = "./genetic_map/Male"+refSeq.name()+"CDF.txt";
+    }
+
+    BufferedReader fbr = new BufferedReader(new FileReader(fileName));
+    ArrayList<Double> cdf_list = new ArrayList<Double>();
+    ArrayList<Integer> pos_list = new ArrayList<Integer>();
+    try {
+        String line = fbr.readLine();
+        line = fbr.readLine();
+        while (line != null){
+            String[] words = line.split("\t");
+            pos_list.add(Integer.parseInt(words[1])); 
+            cdf_list.add(Double.parseDouble(words[3]));
             line = fbr.readLine();
-            while (line != null){
-                String[] words = line.split("\t");
-                pos_list.add(Integer.parseInt(words[1]));
-                cdf_list.add(Double.parseDouble(words[3]));
-                line = fbr.readLine();
+          }
+    } finally {
+        fbr.close();
+    }
+    //go through the crossoverPoints 
+    // System.out.println("length = " +crossoverPoints.length);
+    for (int i = 0; i < crossoverPoints.length; i++) {
+        //choose any number between 0 and 1
+        probability = mRandom.nextDouble();
+        for (int j = 0 ; j < pos_list.size()-1 ; j++) {
+            //find the area where is the CDF is that randome number
+            if (probability >= cdf_list.get(j) && probability < cdf_list.get(j+1)){
+                position = pos_list.get(j);
             }
-        } finally {
-            fbr.close();
         }
-        //go through the crossoverPoints 
-        for (int p = 0; p < crossoverPoints.length; p++) {
-            //choose any number between 0 and 1
-            probability = Math.random();
-            for (int k = 0 ; k < pos_list.size()-1 ; k++) {
-                //find the area where is the CDF is that randome number
-                if (probability >= cdf_list.get(k) && probability < cdf_list.get(k+1)){
-                    position = pos_list.get(k);
-                }
-            }
-            //Add to the position list the pos corresponding to CDF
-            crossoverPoints[p] = position;
-        }
-    }// end of Sex.MALE
-    
+        //Add to the position list the pos corresponding to CDF
+        crossoverPoints[i] = position;
+    }
     // for (int i = 0; i < crossoverPoints.length; i++) {
     //   crossoverPoints[i] = mRandom.nextInt(seqLength);
     // } 
