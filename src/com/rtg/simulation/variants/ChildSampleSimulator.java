@@ -285,10 +285,10 @@ public class ChildSampleSimulator {
     
     //open the genetic map associated with chromosome         
     if (sex == Sex.FEMALE){
-      fileName = "./genetic_map/Female"+refSeq.name()+"CDF.txt";
+      fileName = "./genetic_map1/Female"+refSeq.name()+"CDF.txt";
     }
     else if (sex == Sex.MALE){
-      fileName = "./genetic_map/Male"+refSeq.name()+"CDF.txt";
+      fileName = "./genetic_map1/Male"+refSeq.name()+"CDF.txt";
     }
     BufferedReader br = new BufferedReader(new FileReader(fileName));
     ArrayList<Double> cdf_list = new ArrayList<Double>();
