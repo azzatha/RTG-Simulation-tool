@@ -279,7 +279,6 @@ public class ChildSampleSimulator {
   // Get the (sorted) parent recombination points for this (diploid) chromosome. There must be at least one and there may be extra
   private int[] getCrossoverPositions(ReferenceSequence refSeq, Sex sex, int seqLength) throws IOException  {
     final int[] crossoverPoints = new int[1 + (mRandom.nextDouble() < mExtraCrossoverFreq ? 1 : 0)];
-    Double probability = 0.0;
     Integer position = 0;
     String fileName = null;
     
@@ -290,7 +289,6 @@ public class ChildSampleSimulator {
     else if (sex == Sex.MALE){
       fileName = "./genetic_map/Male"+refSeq.name()+"CDF.txt";
     }
-
     BufferedReader fbr = new BufferedReader(new FileReader(fileName));
     ArrayList<Double> cdf_list = new ArrayList<Double>();
     ArrayList<Integer> pos_list = new ArrayList<Integer>();
@@ -306,15 +304,15 @@ public class ChildSampleSimulator {
     } finally {
         fbr.close();
     }
-    //go through the crossoverPoints 
+    // go through the crossoverPoints 
     // System.out.println("length = " +crossoverPoints.length);
     for (int i = 0; i < crossoverPoints.length; i++) {
         //choose any number between 0 and 1
-        probability = mRandom.nextDouble();
         for (int j = 0 ; j < pos_list.size()-1 ; j++) {
             //find the area where is the CDF is that randome number
-            if (probability >= cdf_list.get(j) && probability < cdf_list.get(j+1)){
+            if (mRandom.nextDouble() >= cdf_list.get(j) && mRandom.nextDouble() < cdf_list.get(j+1)){
                 position = pos_list.get(j);
+                break;
             }
         }
         //Add to the position list the pos corresponding to CDF
@@ -328,9 +326,9 @@ public class ChildSampleSimulator {
     if (mVerbose) {
       Diagnostic.info("Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
     }
-    //System.out.println( "Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
-    //for (int i = 0; i < crossoverPoints.length; i++) {
-    // System.out.println( "female crossoverPoints[" +i+"]"+   crossoverPoints[i]);}
+    System.out.println( "Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
+    for (int i = 0; i < crossoverPoints.length; i++) {
+    System.out.println( "female crossoverPoints[" +i+"]"+   crossoverPoints[i]);}
     
     return crossoverPoints;
   }
