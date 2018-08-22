@@ -326,9 +326,9 @@ public class ChildSampleSimulator {
     if (mVerbose) {
       Diagnostic.info("Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
     }
-    System.out.println( "Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
-    for (int i = 0; i < crossoverPoints.length; i++) {
-    System.out.println( "female crossoverPoints[" +i+"]"+   crossoverPoints[i]);}
+    // System.out.println( "Chose " + crossoverPoints.length + " recombination points for " + sex + " parent on chromosome " + refSeq.name());
+    // for (int i = 0; i < crossoverPoints.length; i++) {
+    // System.out.println( "female crossoverPoints[" +i+"]"+   crossoverPoints[i]);}
     
     return crossoverPoints;
   }
