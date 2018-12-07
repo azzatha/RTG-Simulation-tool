@@ -320,9 +320,6 @@ public class ChildSampleSimulator {
         //Add to the position list the pos corresponding to CDF
         crossoverPoints[i] = position;
     }
-    // for (int i = 0; i < crossoverPoints.length; i++) {
-    //   crossoverPoints[i] = mRandom.nextInt(seqLength);
-    // } 
 
     Arrays.sort(crossoverPoints);
     if (mVerbose) {
