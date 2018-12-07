@@ -93,9 +93,9 @@ group.
     $ git clone https://github.com/RealTimeGenomics/rtg-tools.git
     $ cd rtg-tools
 
-## Compile / run unit tests
+## Compile / run unit tests (Updated Simulation)
 
-    $ ant runalltests
+    $ ant -Dregression.update="com.rtg.*" runalltests
 
 ## Build RTG Tools package
 
