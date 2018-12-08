@@ -129,4 +129,4 @@ installation directory:
 
 You need to have one VCF file contains the genetic information of mother and father, then run the command as follow:
 
-$   rtg childsim --mother $motherSample --father $motherSample  -i InputFile.vcf.gz  -o Child -t referenceGenome.sdf -s Child
+    $   rtg childsim --mother $motherSample --father $motherSample  -i InputFile.vcf.gz  -o Child -t referenceGenome.sdf -s Child
