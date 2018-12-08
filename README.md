@@ -1,4 +1,4 @@
-# RTG Tools (Updated Version)
+# RTG Tools (updated simulation)
 
 Copyright (c) 2018 Real Time Genomics Ltd
 
