@@ -6,7 +6,8 @@ You can find all the details about the tool and how to install in [RTG Tools](ht
 ## Recombination Rate Maps
 
 - For the simulation we have used data files containing recombination rates for human build 37 at [Recombination maps from Bhérer, C. et al. Nature Communications](https://github.com/cbherer/Bherer_etal_SexualDimorphismRecombination)
-- Since we need to find the recombination probability that helps with deciding the number of recombinations per chromosome, we converted the recombination rate Map (with recombination rate measured in cM) to recombination probability, using the code [calculate_prob_cdf.py] ()
+- Since we need to find the recombination probability that helps with deciding the number of recombinations per chromosome, we converted the recombination rate Map (with recombination rate measured in cM) to recombination probability.
+- After obtaining recombination probabilities for each chromosomal position in the human genome, we normalized the value and calculated the Cumulative Distribution Function (CDF), using the code [calculate_prob_cdf.py] (https://github.com/azzatha/RTG-Simulation-tool/blob/master/calculate_prob_cdf.py).
 
 
 ## Compile / run unit tests (Updated Simulation)
