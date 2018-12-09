@@ -3,6 +3,12 @@
 You can find all the details about the tool and how to install in [RTG Tools](https://github.com/RealTimeGenomics/rtg-tools)
 
 
+## Recombination Rate Maps
+
+- For the simulation we have used data files containing recombination rates for human build 37 at [Recombination maps from Bhérer, C. et al. Nature Communications](https://github.com/cbherer/Bherer_etal_SexualDimorphismRecombination)
+- 
+
+
 ## Compile / run unit tests (Updated Simulation)
 
     $ ant -Dregression.update="com.rtg.*" runalltests
